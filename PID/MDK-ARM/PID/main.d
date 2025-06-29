@@ -20,5 +20,7 @@ pid/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h \
   C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h \
   C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h \
+  C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
+  C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
   C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
-  ..\Core\Inc\usart.h ..\Core\Inc\gpio.h
+  ..\Core\Inc\tim.h ..\Core\Inc\usart.h ..\Core\Inc\gpio.h
