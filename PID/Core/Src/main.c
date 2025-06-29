@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -25,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include "oled.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -39,11 +41,13 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-unsigned int MotorSpeed;
-int MotorOutput;
+uint8_t KeyNum = 0;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+float Target = 50, Actual, Out;			//目标值，实际值，输出值
+float Error0, Error1, ErrorInt;		//本次误差，上次误差，误差积分
+float Kp=10, Ki=5, Kd;					//比例项，积分项，微分项的权重
 
 /* USER CODE BEGIN PV */
 
@@ -54,31 +58,54 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-
-	static unsigned char i = 0;
 	if(htim == (&htim2))
 	{
-		MotorSpeed = (short)((__HAL_TIM_GET_COUNTER(&htim4)*0.048f*3.14f)/(10.4f));
+		//当前速度
+		Actual = (__HAL_TIM_GET_COUNTER(&htim4)) / (52*0.01); //速度 = 脉冲总数 / （单圈脉冲总数 * 时间周期）
 		__HAL_TIM_SET_COUNTER(&htim4,0);
-		
-		
-		MotorOutput = 3600;
-		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, MotorOutput);
-		MotorOutput = MotorOutput * 100 / 7200;
-		i++;
-		if(i>100)
+			
+		//本次误差Error0 上次误差Error1
+		Error1 = Error0;			
+		Error0 = Target - Actual;	
+			
+		//误差积分
+		if (Ki != 0)				
 		{
-			HAL_GPIO_TogglePin(GPIOF,GPIO_PIN_10);
-			printf("Encoder = %d  Moto = %d \r\n",MotorSpeed,MotorOutput);
-			i = 0;
+			ErrorInt += Error0;		
 		}
+		else						
+		{
+			ErrorInt = 0;			
+		}
+		
+		//PID计算
+		Out = Kp * Error0 + Ki * ErrorInt + Kd * (Error0 - Error1);
+	
+		//输出限幅
+		if (Out > 7200) {Out = 7200;}	
+		if (Out < -7200) {Out = -7200;}	
+		
+		/*执行控制*/
+		/*输出值给到电机PWM*/	
+		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, Out);
 	}
 }
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin== GPIO_PIN_0)
+	{
+		HAL_Delay(20);
+		if(HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_0)==1)
+		{
+			KeyNum++;
+		}
+		__HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_0);
+	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -114,20 +141,48 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM2_Init();
   MX_TIM4_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
 	HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_1);
 	HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_2);
 	HAL_TIM_Base_Start_IT(&htim2);
+	
+	
+	 OLED_Init();                          
+	 OLED_Clear();                         
+
+	OLED_ShowString(0,0,"Target:",16, 1);   
+	OLED_ShowString(0,3,"Actual:",16,1);
+	OLED_ShowString(0,6,"Out:",16,1); 
+
+	OLED_ShowString(100,0,"r/s",16, 1);   
+	OLED_ShowString(100,3,"r/s",16,1);
+	OLED_ShowString(100,6,"%",16,1); 
   /* USER CODE END 2 */
 
+			
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+		if(KeyNum==0)
+		{
+			Target = 50;
+		}
+		else if(KeyNum==1)
+		{
+			Target = 30;
+		}
+		else if(KeyNum==3)
+		{
+			Target = 10;
+		}
 //		HAL_GPIO_TogglePin(GPIOF,GPIO_PIN_10);
-//		HAL_Delay(100);
-//		printf("zzp");
+	 OLED_ShowNum(60,0,Target,3,16, 0);
+	 OLED_ShowNum(60,3,Actual,3,16, 0);
+	 OLED_ShowNum(60,6,Out/7200*100,3,16, 0);
+		printf("%f,%f,%f\r\n", Target, Actual, Out/7200*100);	
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

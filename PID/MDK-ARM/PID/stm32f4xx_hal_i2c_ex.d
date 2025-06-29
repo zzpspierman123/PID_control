@@ -1,5 +1,5 @@
-pid/stm32f4xx_hal_pwr.o: \
-  C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c \
+pid/stm32f4xx_hal_i2c_ex.o: \
+  C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c_ex.c \
   C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \

@@ -1,5 +1,4 @@
-pid/stm32f4xx_hal_pwr.o: \
-  C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c \
+pid/oled.o: ..\USER\oled.c ..\USER\oled.h \
   C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
@@ -25,4 +24,5 @@ pid/stm32f4xx_hal_pwr.o: \
   C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h \
   C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
-  C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h
+  C:\Users\18742\STM32Cube\Repository\STM32Cube_FW_F4_V1.28.2\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
+  ..\USER\oledfont.h
